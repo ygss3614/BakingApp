@@ -1,27 +1,32 @@
 package com.example.android.bakingapp.ui;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.data.Recipe;
+import com.google.android.material.card.MaterialCardView;
 
-import java.text.BreakIterator;
+
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.example.android.bakingapp.ui.RecipeAdapter.RecipeViewHolder.*;
+
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
     private List<Recipe> mRecipeList;
     private OnItemClickListener listener;
-    private TextView recipeName;
+    private TextView mRecipeNameTextView;
+    private ImageView mRecipeIconImageView;
+    private MaterialCardView mRecipeNameCardView;
 
 
     // interface
@@ -34,7 +39,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
                          OnItemClickListener listenerOnItemClickListener){
         mRecipeList = recipeList;
         listener = listenerOnItemClickListener;
-
     }
 
     @NonNull
@@ -67,18 +71,20 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         RecipeViewHolder(@NonNull View itemView) {
 
             super(itemView);
-            recipeName = itemView.findViewById(R.id.recipe_name_tv);
-
+            mRecipeNameTextView = itemView.findViewById(R.id.recipe_name_tv);
+            mRecipeNameCardView = itemView.findViewById(R.id.recipe_name_cv);
+            mRecipeIconImageView = itemView.findViewById(R.id.recipe_icon_iv);
         }
 
         void bind(final Recipe recipe, final OnItemClickListener listener){
-            recipeName.setText(recipe.getName());
-//            recipeName.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    listener.onItemClick(recipe);
-//                }
-//            });
+            mRecipeNameTextView.setText(recipe.getName());
+
+            mRecipeNameCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemClick(recipe);
+                }
+            });
 
         }
     }

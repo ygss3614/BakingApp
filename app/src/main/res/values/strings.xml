@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">Baking Time</string>
+    <string name="recipe_ingredients_label">Ingredients</string>
+    <string name="recipe_ingredients_list">2 cups ajaj</string>
 
+    <string name="previous_step_video">previous step video</string>
+    <string name="next_step_video">nextstep video</string>
+    <string name="recipe_icon_image_view">recipe icon</string>
 
 </resources>
