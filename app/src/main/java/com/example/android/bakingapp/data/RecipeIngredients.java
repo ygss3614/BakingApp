@@ -8,9 +8,9 @@ public class RecipeIngredients implements Parcelable {
     private double quantity;
     private String measure, ingredient;
 
-    RecipeIngredients () {}
+    public RecipeIngredients () {}
 
-    RecipeIngredients(int quantity, String measure, String ingredient) {
+    public RecipeIngredients(int quantity, String measure, String ingredient) {
         this.quantity = quantity;
         this.measure = measure;
         this.ingredient = ingredient;

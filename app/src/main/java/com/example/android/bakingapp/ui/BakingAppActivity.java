@@ -1,14 +1,12 @@
 package com.example.android.bakingapp.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.android.bakingapp.R;
@@ -35,8 +33,6 @@ public class BakingAppActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.baking_app_activity);
         loadRecipes();
-
-
     }
 
     public void loadRecipes(){
@@ -88,4 +84,5 @@ public class BakingAppActivity extends AppCompatActivity {
         }
         return recipeList;
     }
+
 }

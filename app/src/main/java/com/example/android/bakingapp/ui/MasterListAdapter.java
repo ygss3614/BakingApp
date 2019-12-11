@@ -1,51 +1,47 @@
 package com.example.android.bakingapp.ui;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.data.Recipe;
+import com.example.android.bakingapp.data.RecipeSteps;
 import com.google.android.material.card.MaterialCardView;
-
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-
-public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
+public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.MasterListViewHolder> {
 
     private List<Recipe> mRecipeList;
-    private OnItemClickListener listener;
+    private RecipeAdapter.OnItemClickListener listener;
     private TextView mRecipeNameTextView;
-    private ImageView mRecipeIconImageView;
+    private TextView mRecipeServingCountTextView ;
     private MaterialCardView mRecipeNameCardView;
 
 
     // interface
     public interface OnItemClickListener {
-        void onItemClick(Recipe recipe);
+        void onItemClick(RecipeSteps recipeSteps);
     }
 
 
-    public RecipeAdapter(List<Recipe> recipeList,
-                         OnItemClickListener listenerOnItemClickListener){
+    public MasterListAdapter(List<Recipe> recipeList,
+                         RecipeAdapter.OnItemClickListener listenerOnItemClickListener){
         mRecipeList = recipeList;
         listener = listenerOnItemClickListener;
     }
 
     @NonNull
     @Override
-    public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MasterListAdapter.MasterListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        int layoutIdForMovieItem = R.layout.recipe_item;
+        int layoutIdForMovieItem = R.layout.recipe_master_list_item;
 
         Context context = parent.getContext();
 
@@ -53,11 +49,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         View view = inflater.inflate(layoutIdForMovieItem, parent, false);
 
-        return new RecipeViewHolder(view);
+        return new MasterListAdapter.MasterListViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RecipeViewHolder holder, int i) {
+    public void onBindViewHolder(MasterListAdapter.MasterListViewHolder holder, int i) {
         holder.bind(mRecipeList.get(i), listener);
     }
 
@@ -66,17 +62,19 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         return mRecipeList.size();
     }
 
-    class RecipeViewHolder extends RecyclerView.ViewHolder{
+    class MasterListViewHolder extends RecyclerView.ViewHolder{
 
-        RecipeViewHolder(@NonNull View itemView) {
+        MasterListViewHolder(@NonNull View itemView) {
 
             super(itemView);
             mRecipeNameTextView = itemView.findViewById(R.id.recipe_name_tv);
             mRecipeNameCardView = itemView.findViewById(R.id.recipe_name_cv);
+            mRecipeServingCountTextView = itemView.findViewById(R.id.recipe_serving_count_tv);
         }
 
-        void bind(final Recipe recipe, final OnItemClickListener listener){
+        void bind(final Recipe recipe, final RecipeAdapter.OnItemClickListener listener){
             mRecipeNameTextView.setText(recipe.getName());
+            mRecipeServingCountTextView.setText(Integer.toString(recipe.getServings()));
 
             mRecipeNameCardView.setOnClickListener(new View.OnClickListener() {
                 @Override

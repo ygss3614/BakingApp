@@ -8,9 +8,9 @@ public class RecipeSteps implements Parcelable {
     private int id;
     private String shortDescription, description, videoURL, thumbnailURL;
 
-    RecipeSteps() {}
+    public RecipeSteps() {}
 
-    RecipeSteps(int id, String shortDescription, String description, String videoURL,
+    public RecipeSteps(int id, String shortDescription, String description, String videoURL,
                 String thumbnailURL ) {
         this.id = id;
         this.shortDescription = shortDescription;
