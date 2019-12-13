@@ -38,7 +38,7 @@ public class BakingAppActivity extends AppCompatActivity {
     public void loadRecipes(){
         mRecipeRecyclerView = findViewById(R.id.recipes_rv);
 
-        mLayoutManager = new GridLayoutManager(BakingAppActivity.this, 1);
+        mLayoutManager = new GridLayoutManager(BakingAppActivity.this, 2);
 
         mRecipeRecyclerView.setLayoutManager(mLayoutManager);
 

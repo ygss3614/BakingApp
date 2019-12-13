@@ -6,5 +6,6 @@
     <string name="previous_step_video">previous step video</string>
     <string name="next_step_video">nextstep video</string>
     <string name="recipe_icon_image_view">recipe icon</string>
+    <string name="recipe_thumbnail">recipe thumbnail</string>
 
 </resources>

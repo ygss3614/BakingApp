@@ -3,8 +3,6 @@ package com.example.android.bakingapp.ui;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.media.session.MediaSessionCompat;
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +11,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.data.Recipe;
-import com.example.android.bakingapp.data.RecipeIngredients;
 import com.example.android.bakingapp.data.RecipeSteps;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -47,7 +43,6 @@ public class RecipeStepFragment extends Fragment {
     private SimpleExoPlayerView mPlayerView;
     private TextView stepShortDescription;
     private TextView stepDescription;
-    private TextView mRecipeIngredientsTextView;
     private ImageButton previousStepButton;
     private ImageButton nextStepButton;
 
@@ -59,10 +54,9 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.step_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_step, container, false);
 
         mPlayerView = rootView.findViewById(R.id.playerView);
-        mRecipeIngredientsTextView = rootView.findViewById(R.id.ingredients_list_tv);
 
         stepShortDescription = rootView.findViewById(R.id.step_short_description_tv);
         stepDescription = rootView.findViewById(R.id.step_description_tv);
@@ -128,19 +122,11 @@ public class RecipeStepFragment extends Fragment {
         }
 
         String stepVideoUrl = mRecipeSteps.get(currentIndex).getVideoURL();
+        Log.d("FRAGMENT", stepVideoUrl);
         initializePlayer(stepVideoUrl);
     }
 
-    private String ingredientstoString (List<RecipeIngredients> ingredients){
 
-        String ingredientsListString = "";
-        for(int i = 0; i < ingredients.size(); i++){
-            RecipeIngredients ingredient = ingredients.get(i);
-            ingredientsListString += String.format("%s %s %s\n",
-                    ingredient.getQuantity(), ingredient.getMeasure(), ingredient.getIngredient());
-        }
-        return ingredientsListString;
-    }
 
 
     public void setmRecipeSteps(List<RecipeSteps> recipeSteps) {
@@ -172,20 +158,18 @@ public class RecipeStepFragment extends Fragment {
         mExoPlayer.setPlayWhenReady(true);
     }
 
+    @Override
+    public void onPause() {
 
-    /**
-     * Media Session Callbacks, where all external clients control the player.
-     */
-    private class MySessionCallback extends MediaSessionCompat.Callback {
-        @Override
-        public void onPlay() {
-            mExoPlayer.setPlayWhenReady(true);
-        }
+        //Proceed to release the Exo Player
+        releaseExoPlayer();
 
-        @Override
-        public void onPause() {
-            mExoPlayer.setPlayWhenReady(false);
-        }
+        super.onPause();
+    }
+    private void releaseExoPlayer() {
+        mPlayerView.setPlayer(null);
+        mExoPlayer.release();
+        mExoPlayer = null;
     }
 
     @Override
