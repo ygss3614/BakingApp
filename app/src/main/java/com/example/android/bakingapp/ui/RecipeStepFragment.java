@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
+import com.example.android.bakingapp.data.Recipe;
 import com.example.android.bakingapp.data.RecipeSteps;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -24,6 +25,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +47,8 @@ public class RecipeStepFragment extends Fragment {
     private TextView stepDescription;
     private ImageButton previousStepButton;
     private ImageButton nextStepButton;
+    private MaterialCardView mPlayerViewMaterialCard;
+    private String videoURL;
 
 
     public RecipeStepFragment() {
@@ -57,6 +61,7 @@ public class RecipeStepFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_step, container, false);
 
         mPlayerView = rootView.findViewById(R.id.playerView);
+        mPlayerViewMaterialCard = rootView.findViewById(R.id.player_view_mc);
 
         stepShortDescription = rootView.findViewById(R.id.step_short_description_tv);
         stepDescription = rootView.findViewById(R.id.step_description_tv);
@@ -87,6 +92,7 @@ public class RecipeStepFragment extends Fragment {
                 // Increment position as long as the index remains <= the size of the image ids list
                 if (mListIndex < mRecipeSteps.size() - 1) {
                     mListIndex++;
+                    mExoPlayer.stop();
                 } else {
                     // The end of list has been reached, so return to beginning index
                     mListIndex = 0;
@@ -121,12 +127,16 @@ public class RecipeStepFragment extends Fragment {
             stepDescription.setText(step.getDescription());
         }
 
-        String stepVideoUrl = mRecipeSteps.get(currentIndex).getVideoURL();
-        Log.d("FRAGMENT", stepVideoUrl);
-        initializePlayer(stepVideoUrl);
+        RecipeSteps recipeSteps = mRecipeSteps.get(currentIndex);
+
+        if(recipeSteps.getVideoURL().length() != 0){
+            mPlayerViewMaterialCard.setVisibility(View.VISIBLE);
+            initializePlayer(recipeSteps.getVideoURL());
+        }else{
+            mPlayerViewMaterialCard.setVisibility(View.GONE);
+        }
+
     }
-
-
 
 
     public void setmRecipeSteps(List<RecipeSteps> recipeSteps) {

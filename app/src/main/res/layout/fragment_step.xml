@@ -33,7 +33,7 @@
 
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardView"
+        android:id="@+id/player_view_mc"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_marginStart="@dimen/card_margin_left"

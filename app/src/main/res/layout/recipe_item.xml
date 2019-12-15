@@ -17,61 +17,25 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="138dp">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/recipe_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:fontFamily="casual"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/recipe_thumb_iv"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="pinable pie" />
-
-        <TextView
-            android:id="@+id/recipe_serving_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginBottom="16dp"
-            android:drawableStart="@drawable/ic_servings"
-            android:drawablePadding="8dp"
-            android:gravity="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="@color/colorAccent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/recipe_name_tv"
-            app:layout_constraintTop_toBottomOf="@+id/recipe_name_tv"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <TextView
-            android:id="@+id/recipe_serving_count_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:fontFamily="casual"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+            android:textColor="#804B47"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/recipe_serving_tv"
-            app:layout_constraintStart_toEndOf="@+id/recipe_serving_tv"
-            app:layout_constraintTop_toBottomOf="@+id/recipe_serving_tv"
-            tools:text="9" />
-
-        <ImageView
-            android:id="@+id/recipe_thumb_iv"
-            android:layout_width="167dp"
-            android:layout_height="107dp"
-            android:layout_marginStart="12dp"
-            android:contentDescription="@string/recipe_thumbnail"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/recipes_background" />
-
+            tools:text="pinable pie" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

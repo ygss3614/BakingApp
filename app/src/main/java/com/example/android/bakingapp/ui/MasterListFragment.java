@@ -82,6 +82,8 @@ public class MasterListFragment extends Fragment {
 
         recyclerViewSteps.setAdapter(mAdapter);
 
+
+
         return rootView;
     }
 

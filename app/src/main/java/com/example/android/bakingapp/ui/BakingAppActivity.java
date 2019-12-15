@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.data.Recipe;
+import com.example.android.bakingapp.utils.JsonUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -38,7 +39,7 @@ public class BakingAppActivity extends AppCompatActivity {
     public void loadRecipes(){
         mRecipeRecyclerView = findViewById(R.id.recipes_rv);
 
-        mLayoutManager = new GridLayoutManager(BakingAppActivity.this, 2);
+        mLayoutManager = new GridLayoutManager(BakingAppActivity.this, 1);
 
         mRecipeRecyclerView.setLayoutManager(mLayoutManager);
 
@@ -84,5 +85,7 @@ public class BakingAppActivity extends AppCompatActivity {
         }
         return recipeList;
     }
+
+
 
 }
