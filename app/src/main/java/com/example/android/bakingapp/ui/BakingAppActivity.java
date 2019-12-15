@@ -1,19 +1,26 @@
 package com.example.android.bakingapp.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.app.LoaderManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.data.Recipe;
 import com.example.android.bakingapp.utils.JsonUtils;
+import com.example.android.bakingapp.utils.MyAsyncTaskLoader;
+import com.example.android.bakingapp.utils.NetworkUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +28,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
+import java.net.URL;
 import java.util.List;
 
 public class BakingAppActivity extends AppCompatActivity {
@@ -33,19 +41,20 @@ public class BakingAppActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.baking_app_activity);
-        loadRecipes();
-    }
 
-    public void loadRecipes(){
         mRecipeRecyclerView = findViewById(R.id.recipes_rv);
 
         mLayoutManager = new GridLayoutManager(BakingAppActivity.this, 1);
 
         mRecipeRecyclerView.setLayoutManager(mLayoutManager);
 
-        List<Recipe> mRecipeList = loadJsonData();
+        makeRecipeSearch();
+    }
 
-        RecipeAdapter mAdapter = new RecipeAdapter(mRecipeList, new RecipeAdapter.OnItemClickListener() {
+    public void loadRecipes(List<Recipe> recipes){
+
+
+        RecipeAdapter mAdapter = new RecipeAdapter(recipes, new RecipeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Recipe recipe) {
                 Context context = BakingAppActivity.this;
@@ -61,28 +70,35 @@ public class BakingAppActivity extends AppCompatActivity {
         mRecipeRecyclerView.setAdapter(mAdapter);
     }
 
-    public List<Recipe> loadJsonData()  {
+    public void makeRecipeSearch(){
+        URL recipeURL = NetworkUtils.buildRecipeUrl();
 
+        LoaderManager loaderManager = getSupportLoaderManager();
+
+        new MyAsyncTaskLoader(
+                new MyAsyncTaskLoader.AsyncResponse() {
+                    @Override
+                    public void processFinish(String output) {
+                        Log.d("BAKING_APP_ACTIVITY", "LOAD RECIPE FROM INTERNET");
+                        if( output != null){
+                            List<Recipe> recipeList = loadJsonData(output);
+                            loadRecipes(recipeList);
+                        }else{
+                           Log.d("BAKING_APP_ACTIVITY", "ERROR ON LOAD RECIPE");
+                        }
+
+                    }
+                }, this
+        ).startAsyncTaskLoader(recipeURL, loaderManager, MyAsyncTaskLoader.RECIPE_SEARCH_LOADER);
+
+    }
+
+
+    public List<Recipe> loadJsonData(String recipeJson)  {
         Gson gson = new Gson();
-        List<Recipe> recipeList = null;
-
-        InputStream is = getResources().openRawResource(R.raw.recipes);
-
+        List<Recipe> recipeList;
         Type RECIPE_TYPE = new TypeToken<List<Recipe>>() {}.getType();
-
-        try {
-            Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-            recipeList = gson.fromJson(reader, RECIPE_TYPE);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        recipeList = gson.fromJson(recipeJson, RECIPE_TYPE);
         return recipeList;
     }
 
