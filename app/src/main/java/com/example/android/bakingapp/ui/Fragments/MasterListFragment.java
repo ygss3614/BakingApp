@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MasterListFragment extends Fragment {
 
     private List<RecipeSteps> mRecipeSteps;
+    private int mStepIndex;
 
     // Define a new interface OnImageClickListener that triggers a callback in the host activity
     OnItemClickListener mCallback;
@@ -88,6 +89,9 @@ public class MasterListFragment extends Fragment {
     public void setmRecipeSteps(List<RecipeSteps> recipeSteps) {
         mRecipeSteps = recipeSteps;
 
+    }
+    public void setStepIndex(int index){
+        mStepIndex = index;
     }
 
 }

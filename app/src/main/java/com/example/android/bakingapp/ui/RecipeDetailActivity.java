@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.example.android.bakingapp.Adapters.RecipeStepsAdapter;
 import com.example.android.bakingapp.BakingTimeService;
@@ -33,17 +34,17 @@ public class RecipeDetailActivity extends AppCompatActivity implements MasterLis
 
     public static final String EXTRA_RECIPE = "recipe";
     public static final String EXTRA_PORTRAIT = "is_portrait";
+    public static final String EXTRA_STEP_INDEX = "step_index";
     private static final Recipe DEFAULT_RECIPE = new Recipe();
 
     private Recipe mRecipe;
     private Boolean mIsPortrait = false;
-    private Boolean mWasPortraited = false;
     private Boolean mTwoPanel = false;
     private FrameLayout mRecipeIngredientsContainer;
     private FragmentManager mFragmentManager;
     private RecyclerView mRecipeStepsRecyclerView;
     private GridLayoutManager mLayoutManager;
-
+    private TextView mRecipeIngredientsTextView;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -57,6 +58,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements MasterLis
 
         mRecipe = Objects.requireNonNull(intent).getParcelableExtra(EXTRA_RECIPE);
 
+        // Update widget recipe ingredients
         BakingTimeService.startActionUpdateRecipe(this, mRecipe);
 
 
@@ -65,21 +67,18 @@ public class RecipeDetailActivity extends AppCompatActivity implements MasterLis
             return;
         }
 
-
         mFragmentManager = getSupportFragmentManager();
-
 
         mIsPortrait = (findViewById(R.id.recipe_ingredients_container) != null);
         mTwoPanel = (findViewById(R.id.recipe_detail_ll) != null);
         mRecipeStepsRecyclerView = findViewById(R.id.recipe_steps_rv);
+        mRecipeIngredientsTextView = findViewById(R.id.recipe_detail_ingredients_list_tv);
 
         if(savedInstanceState != null){
             mRecipe = savedInstanceState.getParcelable(EXTRA_RECIPE);
-            mWasPortraited = savedInstanceState.getBoolean(EXTRA_PORTRAIT);
         }
 
 
-        // updates the action bar text to show the current recipe name
         getSupportActionBar().setTitle(mRecipe.getName());
 
         Log.d("FRAGMENT", "ON CREATE ACTIVITY");
@@ -93,25 +92,13 @@ public class RecipeDetailActivity extends AppCompatActivity implements MasterLis
     }
 
     private void startFragmentsOnePanel(){
-        Log.d("FRAGMENT ACTIVITY", "START ONE PANEL");
 
-        if ( mIsPortrait && !mWasPortraited) {
-            // Ingredients fragment
-            RecipeIngredientsFragment recipeIngredientsFragment = new RecipeIngredientsFragment();
-            recipeIngredientsFragment
-                    .setIngredientsString(ingredientsToString(mRecipe.getIngredients()));
-            mFragmentManager.beginTransaction()
-                    .replace(R.id.recipe_ingredients_container, recipeIngredientsFragment)
-                    .commit();
-        }else{
-            getSupportActionBar().hide();
-        }
-
+        mRecipeIngredientsTextView.setText(ingredientsToString(mRecipe.getIngredients()));
 
         mLayoutManager = new GridLayoutManager(RecipeDetailActivity.this, 1);
         mRecipeStepsRecyclerView.setLayoutManager(mLayoutManager);
         List<RecipeSteps> recipeSteps = mRecipe.getSteps();
-        Context context = RecipeDetailActivity.this;
+
 
         RecipeStepsAdapter mAdapter = new RecipeStepsAdapter(recipeSteps, new RecipeStepsAdapter.OnItemClickListener() {
             @Override
@@ -169,9 +156,9 @@ public class RecipeDetailActivity extends AppCompatActivity implements MasterLis
     }
 
 
+
     @Override
     public void onItemSelected(int stepIndex) {
-
         Log.d("FRAGMENT", "ON ITEM SELECTED");
         // if any step item is select, ingredients layout fragment must be hide
         mRecipeIngredientsContainer.setVisibility(View.GONE);
@@ -206,4 +193,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements MasterLis
                 .replace(R.id.recipe_ingredients_container, recipeIngredientsFragment)
                 .commit();
     }
+
+
 }
