@@ -1,4 +1,4 @@
-package com.example.android.bakingapp.ui;
+package com.example.android.bakingapp.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.data.Recipe;
 import com.example.android.bakingapp.data.RecipeSteps;
 import com.google.android.material.card.MaterialCardView;
 

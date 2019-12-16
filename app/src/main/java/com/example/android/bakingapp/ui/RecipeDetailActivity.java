@@ -1,22 +1,29 @@
 package com.example.android.bakingapp.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.example.android.bakingapp.Adapters.RecipeStepsAdapter;
 import com.example.android.bakingapp.BakingTimeService;
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.data.Recipe;
 import com.example.android.bakingapp.data.RecipeIngredients;
 import com.example.android.bakingapp.data.RecipeSteps;
+import com.example.android.bakingapp.ui.Fragments.MasterListFragment;
+import com.example.android.bakingapp.ui.Fragments.RecipeIngredientsFragment;
+import com.example.android.bakingapp.ui.Fragments.RecipeStepFragment;
 
 import java.util.List;
 import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class RecipeDetailActivity extends AppCompatActivity implements MasterListFragment.OnItemClickListener {
@@ -33,6 +40,10 @@ public class RecipeDetailActivity extends AppCompatActivity implements MasterLis
     private Boolean mWasPortraited = false;
     private Boolean mTwoPanel = false;
     private FrameLayout mRecipeIngredientsContainer;
+    private FragmentManager mFragmentManager;
+    private RecyclerView mRecipeStepsRecyclerView;
+    private GridLayoutManager mLayoutManager;
+
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -54,18 +65,24 @@ public class RecipeDetailActivity extends AppCompatActivity implements MasterLis
             return;
         }
 
-        // updates the action bar text to show the current recipe name
-        getSupportActionBar().setTitle(mRecipe.getName());
+
+        mFragmentManager = getSupportFragmentManager();
 
 
         mIsPortrait = (findViewById(R.id.recipe_ingredients_container) != null);
         mTwoPanel = (findViewById(R.id.recipe_detail_ll) != null);
+        mRecipeStepsRecyclerView = findViewById(R.id.recipe_steps_rv);
 
         if(savedInstanceState != null){
             mRecipe = savedInstanceState.getParcelable(EXTRA_RECIPE);
             mWasPortraited = savedInstanceState.getBoolean(EXTRA_PORTRAIT);
         }
 
+
+        // updates the action bar text to show the current recipe name
+        getSupportActionBar().setTitle(mRecipe.getName());
+
+        Log.d("FRAGMENT", "ON CREATE ACTIVITY");
 
         if (mTwoPanel){
             startFragmentsTwoPanel();
@@ -76,53 +93,55 @@ public class RecipeDetailActivity extends AppCompatActivity implements MasterLis
     }
 
     private void startFragmentsOnePanel(){
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        Log.d("FRAGMENT ACTIVITY", "START ONE PANEL");
 
         if ( mIsPortrait && !mWasPortraited) {
-
-
             // Ingredients fragment
             RecipeIngredientsFragment recipeIngredientsFragment = new RecipeIngredientsFragment();
             recipeIngredientsFragment
                     .setIngredientsString(ingredientsToString(mRecipe.getIngredients()));
-            fragmentManager.beginTransaction()
-                    .add(R.id.recipe_ingredients_container, recipeIngredientsFragment)
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.recipe_ingredients_container, recipeIngredientsFragment)
                     .commit();
         }else{
             getSupportActionBar().hide();
         }
 
-        // Step fragment
-        RecipeStepFragment recipeStepFragment = new RecipeStepFragment();
-        recipeStepFragment.setmRecipeSteps(mRecipe.getSteps());
-        recipeStepFragment.setmListIndex(0);
 
-        fragmentManager.beginTransaction()
-                .add(R.id.recipe_steps_container, recipeStepFragment)
-                .commit();
+        mLayoutManager = new GridLayoutManager(RecipeDetailActivity.this, 1);
+        mRecipeStepsRecyclerView.setLayoutManager(mLayoutManager);
+        List<RecipeSteps> recipeSteps = mRecipe.getSteps();
+        Context context = RecipeDetailActivity.this;
 
-
+        RecipeStepsAdapter mAdapter = new RecipeStepsAdapter(recipeSteps, new RecipeStepsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(RecipeSteps recipeStep) {
+            Intent intent = new Intent(RecipeDetailActivity.this, RecipeStepActivity.class);
+            intent.putExtra(RecipeStepActivity.EXTRA_STEP, recipeStep);
+            startActivity(intent);
+            }
+        });
+        mRecipeStepsRecyclerView.setAdapter(mAdapter);
     }
 
     private void startFragmentsTwoPanel(){
         mRecipeIngredientsContainer = findViewById(R.id.recipe_ingredients_container);
-        FragmentManager fragmentManager = getSupportFragmentManager();
+
 
         MasterListFragment masterListFragment = new MasterListFragment();
         masterListFragment
                 .setmRecipeSteps(mRecipe.getSteps());
 
-        fragmentManager.beginTransaction()
-                .add(R.id.master_list_container, masterListFragment)
+        mFragmentManager.beginTransaction()
+                .replace(R.id.master_list_container, masterListFragment)
                 .commit();
 
 
         RecipeIngredientsFragment recipeIngredientsFragment = new RecipeIngredientsFragment();
         recipeIngredientsFragment
                 .setIngredientsString(ingredientsToString(mRecipe.getIngredients()));
-        fragmentManager.beginTransaction()
-                .add(R.id.recipe_ingredients_container, recipeIngredientsFragment)
+        mFragmentManager.beginTransaction()
+                .replace(R.id.recipe_ingredients_container, recipeIngredientsFragment)
                 .commit();
 
     }
@@ -153,16 +172,23 @@ public class RecipeDetailActivity extends AppCompatActivity implements MasterLis
     @Override
     public void onItemSelected(int stepIndex) {
 
+        Log.d("FRAGMENT", "ON ITEM SELECTED");
         // if any step item is select, ingredients layout fragment must be hide
         mRecipeIngredientsContainer.setVisibility(View.GONE);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        RecipeStepFragment recipeStepFragment = new RecipeStepFragment();
-        recipeStepFragment.setmRecipeSteps(mRecipe.getSteps());
-        recipeStepFragment.setmListIndex(stepIndex);
 
-        fragmentManager.beginTransaction()
-                .add(R.id.recipe_steps_container, recipeStepFragment)
+        RecipeStepFragment recipeStepFragment = new RecipeStepFragment();
+
+        RecipeSteps recipeStep = mRecipe.getSteps().get(stepIndex);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(RecipeStepFragment.RECIPE_STEP, recipeStep);
+
+        //Add to the stepFragment object the bundle instance
+        recipeStepFragment.setArguments(bundle);
+
+
+        mFragmentManager.beginTransaction()
+                .replace(R.id.recipe_steps_container, recipeStepFragment)
                 .commit();
 
     }
@@ -172,12 +198,12 @@ public class RecipeDetailActivity extends AppCompatActivity implements MasterLis
         // if recipe step is selected, then ingredients layout fragment must be visible again
         mRecipeIngredientsContainer.setVisibility(View.VISIBLE);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
+
         RecipeIngredientsFragment recipeIngredientsFragment = new RecipeIngredientsFragment();
         recipeIngredientsFragment
                 .setIngredientsString(ingredientsToString(mRecipe.getIngredients()));
-        fragmentManager.beginTransaction()
-                .add(R.id.recipe_ingredients_container, recipeIngredientsFragment)
+        mFragmentManager.beginTransaction()
+                .replace(R.id.recipe_ingredients_container, recipeIngredientsFragment)
                 .commit();
     }
 }

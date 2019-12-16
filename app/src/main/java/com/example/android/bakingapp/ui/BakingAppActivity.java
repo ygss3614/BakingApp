@@ -10,23 +10,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.bakingapp.Adapters.RecipeAdapter;
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.data.Recipe;
-import com.example.android.bakingapp.utils.JsonUtils;
 import com.example.android.bakingapp.utils.MyAsyncTaskLoader;
 import com.example.android.bakingapp.utils.NetworkUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONException;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.List;
@@ -35,6 +29,7 @@ public class BakingAppActivity extends AppCompatActivity {
 
     private GridLayoutManager mLayoutManager;
     private RecyclerView mRecipeRecyclerView;
+    private TextView mConnectionError;
 
 
     @Override
@@ -43,6 +38,7 @@ public class BakingAppActivity extends AppCompatActivity {
         setContentView(R.layout.baking_app_activity);
 
         mRecipeRecyclerView = findViewById(R.id.recipes_rv);
+        mConnectionError = findViewById(R.id.connection_error_tv);
 
         mLayoutManager = new GridLayoutManager(BakingAppActivity.this, 1);
 
@@ -81,10 +77,13 @@ public class BakingAppActivity extends AppCompatActivity {
                     public void processFinish(String output) {
                         Log.d("BAKING_APP_ACTIVITY", "LOAD RECIPE FROM INTERNET");
                         if( output != null){
+                            mConnectionError.setVisibility(View.GONE);
                             List<Recipe> recipeList = loadJsonData(output);
                             loadRecipes(recipeList);
                         }else{
-                           Log.d("BAKING_APP_ACTIVITY", "ERROR ON LOAD RECIPE");
+                            Log.d("BAKING_APP_ACTIVITY", "NO INTERNET");
+                            mConnectionError.setVisibility(View.VISIBLE);
+                            mConnectionError.setText(R.string.no_internet_connection);
                         }
 
                     }

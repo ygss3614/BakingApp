@@ -78,6 +78,7 @@ public class RecipeSteps implements Parcelable {
         return id;
     }
 
+
     public String getShortDescription() {
 
         return shortDescription;
@@ -96,6 +97,11 @@ public class RecipeSteps implements Parcelable {
     public String getThumbnailURL() {
 
         return thumbnailURL;
+    }
+
+    public int getNumberStep() {
+
+        return id + 1 ;
     }
 
 

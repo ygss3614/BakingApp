@@ -40,6 +40,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.BakingAppActivity"></meta-data>
         </activity>
+        <activity
+            android:name=".ui.RecipeStepActivity"/>
+
     </application>
 
 </manifest>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recipe_step_cv"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/card_margin_left"
+    android:layout_marginTop="@dimen/card_margin_top"
+    android:layout_marginEnd="@dimen/card_margin_rigth"
+    android:background="#C8DFE9"
+    android:minHeight="50dp"
+    app:cardBackgroundColor="#E9B6C7"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="false">
+
+    <TextView
+        android:id="@+id/recipe_step_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="3dp"
+        android:fontFamily="casual"
+        android:textAlignment="textStart"
+        android:textColor="#804B47"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+</com.google.android.material.card.MaterialCardView>
+

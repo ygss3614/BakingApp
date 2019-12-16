@@ -3,6 +3,7 @@
     <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/card_margin_left"
@@ -17,89 +18,71 @@
         android:background="#C8DFE9"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/step_short_description_tv"
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/player_view_mc"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:fontFamily="casual"
-            android:gravity="center"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:typeface="normal"
-            app:layout_constraintBottom_toTopOf="@+id/materialCardView"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="300dp"
+            android:layout_marginStart="@dimen/card_margin_left"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/card_margin_rigth"
+            android:maxHeight="@dimen/card_min_heigth"
+            android:paddingStart="2dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="2dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            app:cardBackgroundColor="#0F0F0F"
+            app:cardPreventCornerOverlap="false"
+            app:cardUseCompatPadding="false">
 
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/player_view_mc"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginStart="@dimen/card_margin_left"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="@dimen/card_margin_rigth"
-        android:maxHeight="@dimen/card_min_heigth"
-        app:cardBackgroundColor="#0F0F0F"
-        app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="false">
-
-
-        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-            android:id="@+id/playerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </com.google.android.material.card.MaterialCardView>
-
+            <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+                android:id="@+id/playerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.google.android.material.card.MaterialCardView>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageButton
-                android:id="@+id/next_step_bt"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="1dp"
-                android:layout_marginTop="1dp"
-
-                android:layout_marginEnd="8dp"
-                android:background="#E9B6C7"
-                android:contentDescription="@string/next_step_video"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/previous_step_bt"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/exo_controls_next" />
-
-            <ImageButton
-                android:id="@+id/previous_step_bt"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="1dp"
-                android:layout_marginEnd="1dp"
-                android:background="#E9B6C7"
-                android:contentDescription="@string/previous_step_video"
-                app:layout_constraintEnd_toStartOf="@+id/next_step_bt"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/exo_controls_previous" />
 
             <TextView
                 android:id="@+id/step_description_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="24dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="284dp"
                 android:fontFamily="casual"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/previous_step_bt" />
+                app:layout_constraintTop_toBottomOf="@+id/step_short_description_tv" />
+
+            <TextView
+                android:id="@+id/step_short_description_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="casual"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:typeface="normal"
+                app:layout_constraintBottom_toTopOf="@+id/step_description_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
